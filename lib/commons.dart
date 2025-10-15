@@ -9,8 +9,9 @@ export 'styles/sizes.dart';
 
 //widgets
 export 'widgets/step_circle.dart';
+export 'widgets/mood_icon.dart';
 
-// pages
+//pages
 export 'pages/dashboard/dashboard_page.dart';
 export 'pages/dashboard/dashboard_page_controller.dart';
 export 'pages/home_page.dart';
@@ -19,3 +20,6 @@ export 'pages/mood/mood_page.dart';
 export 'pages/mood/mood_page_controller.dart';
 export 'pages/settings/settings_page.dart';
 export 'pages/settings/settings_page_controller.dart';
+
+//models
+export 'models/mood.dart';

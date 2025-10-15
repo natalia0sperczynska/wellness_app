@@ -14,6 +14,7 @@ class _HomePageState extends State<HomePage> {
     DashboardPage(key: ValueKey('dashboard_page')),
     MoodPage(key:ValueKey('mood_page')),
     //SettingsPage(),
+    Placeholder()
   ];
 
   @override

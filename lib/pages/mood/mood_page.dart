@@ -1,4 +1,5 @@
 import 'package:wellness_app/commons.dart';
+import 'package:wellness_app/pages/mood/mood_selector.dart';
 
 class MoodPage extends StatelessWidget {
   const MoodPage({super.key});
@@ -31,42 +32,42 @@ class MoodPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 40),
                     // ikony do wyboru nastroju
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
-                        Icon(
-                          Icons.sentiment_very_satisfied,
-                          size: 50,
-                          color: Colors.green,
-                        ),
-                        Icon(
-                          Icons.sentiment_satisfied,
-                          size: 50,
-                          color: Colors.lightGreen,
-                        ),
-                        Icon(
-                          Icons.sentiment_neutral,
-                          size: 50,
-                          color: Colors.amber,
-                        ),
-                        Icon(
-                          Icons.sentiment_dissatisfied,
-                          size: 50,
-                          color: Colors.orange,
-                        ),
-                        Icon(
-                          Icons.sentiment_very_dissatisfied,
-                          size: 50,
-                          color: Colors.red,
-                        ),
-                      ],
+                    MoodSelector(
+                      selectedMoodValue: controller.selectedMoodValue,
+                      onMoodSelected: (moodValue) =>
+                          controller.selectMood(moodValue),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 20),
+
+                    if (controller.selectedMoodValue != null)
+                      Text(
+                        "Selected Mood: ${_getMoodText(controller.selectedMoodValue!)}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      onChanged: (value) => controller.setNote(value),
+                      decoration: const InputDecoration(
+                        hintText: 'Add a note about your mood (optional)',
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.all(16),
+                      ),
+                      maxLines: 3,
+                    ),
+
+                    const SizedBox(height: 30),
                     ElevatedButton(
-                      onPressed: () {
-                        // logika w kontrolerze
-                        controller.saveMood();
-                      },
+                      onPressed: controller.selectedMoodValue != null
+                          ? () {
+                              // logika w kontrolerze
+                              controller.saveMood();
+                              //_showSuccessSnackbar(context);
+                            }
+                          : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor,
                         padding: const EdgeInsets.symmetric(
@@ -87,5 +88,22 @@ class MoodPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String _getMoodText(int i) {
+    switch (i) {
+      case 1:
+        return 'Terrible';
+      case 2:
+        return 'Bad';
+      case 3:
+        return 'Okay';
+      case 4:
+        return 'Good';
+      case 5:
+        return 'Terrific';
+      default:
+        return 'Not selected';
+    }
   }
 }
