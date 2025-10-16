@@ -1,3 +1,5 @@
+import 'package:wellness_app/pages/home_page.dart';
+
 import 'commons.dart';
 
 class WellnessApp extends StatelessWidget {

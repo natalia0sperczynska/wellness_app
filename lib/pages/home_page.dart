@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
     DashboardPage(key: ValueKey('dashboard_page')),
     MoodPage(key:ValueKey('mood_page')),
     //SettingsPage(),
-    Placeholder()
+    HabitsPage(key:ValueKey('habits_page'))
   ];
 
   @override
@@ -46,9 +46,9 @@ class _HomePageState extends State<HomePage> {
                     label: Text('Wellness'),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(Icons.settings_outlined),
-                    selectedIcon: Icon(Icons.settings),
-                    label: Text('Settings'),
+                    icon: Icon(Icons.adb_sharp),
+                    selectedIcon: Icon(Icons.adb_sharp),
+                    label: Text('Habbits'),
                   ),
                 ],
               ),
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dashboard'),
           BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Wellness'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+          BottomNavigationBarItem(icon: Icon(Icons.adb), label: 'Habits'),
         ],
       ),
     );
