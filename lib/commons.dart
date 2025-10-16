@@ -9,6 +9,7 @@ export 'styles/sizes.dart';
 //widgets
 export 'widgets/get_greetings.dart';
 export 'widgets/habit_card.dart';
+export 'widgets/habit_form_sheet.dart';
 export 'widgets/mood_icon.dart';
 export 'widgets/progress_ring.dart';
 export 'widgets/score_breakdown.dart';
@@ -19,6 +20,7 @@ export 'widgets/step_circle.dart';
 export 'pages/dashboard/dashboard_page.dart';
 export 'pages/dashboard/dashboard_page_controller.dart';
 export 'pages/habits/habits_page.dart';
+export 'pages/habits/habits_page_controller.dart';
 export 'pages/home_page_controller.dart';
 export 'pages/mood/mood_page.dart';
 export 'pages/mood/mood_selector.dart';
