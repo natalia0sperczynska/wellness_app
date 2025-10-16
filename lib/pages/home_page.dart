@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
                 selectedIndex: selectedIndex,
                 onDestinationSelected: (index) => setState(() => selectedIndex = index),
                 labelType: NavigationRailLabelType.all,
+                useIndicator: true,
                 destinations: const [
                   NavigationRailDestination(
                     icon: Icon(Icons.dashboard_outlined),
@@ -87,6 +88,7 @@ class _HomePageState extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dashboard'),
           BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Wellness'),
+          BottomNavigationBarItem(icon: Icon(Icons.accessibility_new), label: 'Steps'),
           BottomNavigationBarItem(icon: Icon(Icons.adb), label: 'Habits'),
           BottomNavigationBarItem(icon: Icon(Icons.water_drop), label: 'Hydration'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),

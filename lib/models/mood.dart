@@ -11,4 +11,5 @@ class Mood{
     required this.moodValue,
     this.notes,
 });
+
 }

@@ -34,7 +34,6 @@ export 'pages/steps/steps_page_controller.dart';
 //models
 export 'models/mood.dart';
 export 'models/habit.dart';
-export 'models/habit_status.dart';
 export 'models/habit_completion.dart';
 export 'models/hydration.dart';
 

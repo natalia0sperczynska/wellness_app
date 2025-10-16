@@ -12,7 +12,7 @@ class DashboardPage extends StatelessWidget {
         builder: (context, controller, _) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Your wellness score'),
+              title: const Text('Your wellness score for today '),
               centerTitle: true,
             ),
             body: Padding(
@@ -23,7 +23,8 @@ class DashboardPage extends StatelessWidget {
                     const GreetingHeader(),
                     const SizedBox(height: 20),
                   ScoreCircle(score: controller.wellnessScore),
-
+                    const SizedBox(height:20),
+                    ScoreBreakdown(stepsScore: 8500, moodScore: 4, habitsScore: 3, hydrationScore: 6),
                   const SizedBox(height: 20),
                 ]
             ),
