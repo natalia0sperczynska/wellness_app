@@ -6,15 +6,15 @@ class MoodPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return ChangeNotifierProvider(
       create: (_) => MoodController(),
       child: Consumer<MoodController>(
         builder: (context, controller, child) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('Track Your Mood', style: TextStyle()),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
+              title: Text('Track Your Mood'),
             ),
             body: Center(
               child: Padding(
@@ -22,12 +22,9 @@ class MoodPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       'How are you feeling today?',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style:textTheme.headlineSmall,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
@@ -42,10 +39,9 @@ class MoodPage extends StatelessWidget {
                     if (controller.selectedMoodValue != null)
                       Text(
                         "Selected Mood: ${_getMoodText(controller.selectedMoodValue!)}",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
+                        style: textTheme.titleMedium?.copyWith(
                           color: AppColors.primaryColor,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     const SizedBox(height: 20),
@@ -68,16 +64,9 @@ class MoodPage extends StatelessWidget {
                               //_showSuccessSnackbar(context);
                             }
                           : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical: 15,
-                        ),
-                      ),
+
                       child: const Text(
                         'Save Mood',
-                        style: TextStyle(fontSize: 18),
                       ),
                     ),
                   ],

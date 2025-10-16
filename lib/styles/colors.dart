@@ -1,6 +1,7 @@
 import 'package:wellness_app/commons.dart';
 
 class AppColors {
+  AppColors._();
   static const Color primaryColor = Color(0xFF81C784);
   static const Color secondaryColor = Color(0xFFC5AED1);
   static const Color accentColor = Color(0xFF72D3DF);

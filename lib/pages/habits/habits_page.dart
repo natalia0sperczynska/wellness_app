@@ -45,7 +45,6 @@ class _HabitsPageState extends State<HabitsPage> {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      backgroundColor: AppColors.backgroundColor,
       builder: (context) => _HabitFormSheet(initialHabit: habit),
     );
 
@@ -122,7 +121,6 @@ class _HabitsPageState extends State<HabitsPage> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _openHabitForm(),
         icon: const Icon(Icons.add),
@@ -130,7 +128,7 @@ class _HabitsPageState extends State<HabitsPage> {
       ),
       body: SafeArea(
         child: _isLoading
-            ? Center(child: CircularProgressIndicator(color: colorScheme.primary))
+            ? Center(child: CircularProgressIndicator())
             : CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
@@ -145,19 +143,14 @@ class _HabitsPageState extends State<HabitsPage> {
                     const SizedBox(height: 40),
                     Text(
                       'Today\'s Habits',
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        color: colorScheme.onSurface,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.5,
-                      ),
+                      style: theme.textTheme.headlineMedium,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'Build your best self, one habit at a time',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.hintColor),
                       ),
-                    ),
                   ],
                 ),
               ),

@@ -4,14 +4,15 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme =Theme.of(context).textTheme;
     return ChangeNotifierProvider(
       create: (_) => DashboardPageController(),
       child: Consumer<DashboardPageController>(
         builder: (context, controller, _) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              title: const Text('Progress', style: TextStyle(color: Colors.white)),
+              title: const Text('Progress'),
               centerTitle: true,
             ),
             body: Padding(
@@ -37,15 +38,15 @@ class DashboardPage extends StatelessWidget {
                   const SizedBox(height: 40),
                   Container(
                     height: 120,
+                    width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Colors.white10,
+                      color: theme.primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Center(
                       child: Text(
                         "Graph Placeholder",
-                        style: TextStyle(color: Colors.white54),
-                      ),
+                      )
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -71,20 +72,19 @@ class _InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         Text(
           value,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: textTheme.headlineSmall,
         ),
         const SizedBox(height: 4),
         Text(
           title,
-          style: const TextStyle(color: Colors.white70, fontSize: 12),
+          style: textTheme.bodyMedium?.copyWith(
+    color: Theme.of(context).hintColor,
+          ),
         ),
       ],
     );

@@ -5,7 +5,6 @@ export 'package:provider/provider.dart';
 export 'styles/colors.dart';
 export 'styles/styles.dart';
 export 'styles/sizes.dart';
-export 'styles/themes.dart';
 
 //widgets
 export 'widgets/get_greetings.dart';
