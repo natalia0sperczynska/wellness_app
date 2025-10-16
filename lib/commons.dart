@@ -27,6 +27,8 @@ export 'pages/mood/mood_selector.dart';
 export 'pages/mood/mood_page_controller.dart';
 export 'pages/settings/settings_page.dart';
 export 'pages/settings/settings_page_controller.dart';
+export 'pages/steps/steps_page.dart';
+export 'pages/steps/steps_page_controller.dart';
 
 
 //models

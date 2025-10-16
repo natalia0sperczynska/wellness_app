@@ -12,6 +12,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> pages = const [
     DashboardPage(key: ValueKey('dashboard_page')),
+    StepsPage(key:ValueKey('steps_page')),
     MoodPage(key:ValueKey('mood_page')),
     HabitsPage(key:ValueKey('habits_page')),
     HydrationPage(key:ValueKey('hydration_page')),
@@ -42,6 +43,11 @@ class _HomePageState extends State<HomePage> {
                     label: Text('Dashboard'),
                   ),
                   NavigationRailDestination(
+                    icon: Icon(Icons.accessibility_new_outlined),
+                    selectedIcon: Icon(Icons.accessibility_new),
+                    label: Text('Steps'),
+                  ),
+                  NavigationRailDestination(
                     icon: Icon(Icons.favorite_outline),
                     selectedIcon: Icon(Icons.favorite),
                     label: Text('Wellness'),
@@ -49,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                   NavigationRailDestination(
                     icon: Icon(Icons.adb_outlined),
                     selectedIcon: Icon(Icons.adb_sharp),
-                    label: Text('Habbits'),
+                    label: Text('Habits'),
                   ),
                   NavigationRailDestination(
                     icon: Icon(Icons.water_drop_outlined),
