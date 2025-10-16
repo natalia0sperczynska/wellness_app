@@ -17,8 +17,12 @@ class DashboardPage extends StatelessWidget {
             ),
             body: Padding(
               padding: const EdgeInsets.all(AppSizes.padding),
-              child: Column(
-                children: [
+              child: SingleChildScrollView(
+                child:Column(
+                  children: [
+                    const GreetingHeader(),
+                    const SizedBox(height: 20),
+                  ScoreCircle(score: controller.wellnessScore),
                   const SizedBox(height: 20),
                   StepCircle(
                     stepNumber: controller.steps,
@@ -55,6 +59,7 @@ class DashboardPage extends StatelessWidget {
                     child: const Text("Add 500 steps"),
                   )
                 ],
+              ),
               ),
             ),
           );
