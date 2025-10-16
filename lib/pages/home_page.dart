@@ -13,8 +13,9 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> pages = const [
     DashboardPage(key: ValueKey('dashboard_page')),
     MoodPage(key:ValueKey('mood_page')),
-    //SettingsPage(),
-    HabitsPage(key:ValueKey('habits_page'))
+    HabitsPage(key:ValueKey('habits_page')),
+    HydrationPage(key:ValueKey('hydration_page')),
+    SettingsPage(key:ValueKey('settings_page'))
   ];
 
   @override
@@ -46,10 +47,20 @@ class _HomePageState extends State<HomePage> {
                     label: Text('Wellness'),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(Icons.adb_sharp),
+                    icon: Icon(Icons.adb_outlined),
                     selectedIcon: Icon(Icons.adb_sharp),
                     label: Text('Habbits'),
                   ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.water_drop_outlined),
+                    selectedIcon: Icon(Icons.water_drop),
+                    label: Text('Hydration')
+                  ),
+                  NavigationRailDestination(
+                      icon: Icon(Icons.settings_outlined),
+                      selectedIcon: Icon(Icons.settings),
+                      label: Text('Settings'))
+
                 ],
               ),
             ),
@@ -71,6 +82,8 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dashboard'),
           BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Wellness'),
           BottomNavigationBarItem(icon: Icon(Icons.adb), label: 'Habits'),
+          BottomNavigationBarItem(icon: Icon(Icons.water_drop), label: 'Hydration'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
         ],
       ),
     );

@@ -21,7 +21,7 @@ export 'pages/dashboard/dashboard_page.dart';
 export 'pages/dashboard/dashboard_page_controller.dart';
 export 'pages/habits/habits_page.dart';
 export 'pages/habits/habits_page_controller.dart';
-export 'pages/home_page_controller.dart';
+export 'pages/hydration/hydration_page.dart';
 export 'pages/mood/mood_page.dart';
 export 'pages/mood/mood_selector.dart';
 export 'pages/mood/mood_page_controller.dart';

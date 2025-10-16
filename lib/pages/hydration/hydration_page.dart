@@ -1,15 +1,12 @@
 import 'package:wellness_app/commons.dart';
-class SettingsPage extends StatelessWidget{
-  const SettingsPage({super.key});
-
+class HydrationPage extends StatelessWidget{
+  const HydrationPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Settings'),
+          title: Text('Track your hydration'),
         )
     );
   }
-
-
 }
