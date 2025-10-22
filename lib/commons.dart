@@ -1,5 +1,6 @@
 export 'package:flutter/material.dart';
 export 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 //styles
 export 'styles/colors.dart';

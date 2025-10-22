@@ -12,7 +12,6 @@ class DashboardPage extends StatelessWidget {
             builder: (context, controller, StaticDashboardHeader) {
               return Scaffold(
                 appBar: AppBar(
-                  // Używamy tytułu z motywu
                   title: const Text('Your Wellness Score'),
                 ),
                 body:SingleChildScrollView(

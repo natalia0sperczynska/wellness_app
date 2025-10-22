@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:wellness_app/commons.dart';
 class StepsPage extends StatelessWidget {
   const StepsPage({super.key});
@@ -37,6 +38,27 @@ class StepsPage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 40),
+                    TextFormField(
+                      controller: controller.stepsController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      decoration: const InputDecoration(
+                        hintText: 'Add your steps number',
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.all(16),
+                      ),
+                      maxLines: 1,
+                      onChanged: (_) => controller.setSteps(),
+                    ),
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      onPressed: () => controller.setSteps(),
+                      child: const Text("Save"),
+                    ),
+                    const SizedBox(height: 40),
+
                     Container(
                       height: 120,
                       width: double.infinity,
@@ -49,6 +71,10 @@ class StepsPage extends StatelessWidget {
                             "Graph Placeholder",
                           )
                       ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => controller.resetSteps(),
+                      child: const Text("Reset"),
                     ),
                     const SizedBox(height: 30),
                     ElevatedButton(

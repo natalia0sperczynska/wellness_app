@@ -1,4 +1,5 @@
 import 'package:wellness_app/commons.dart';
+import 'package:wellness_app/pages/habits/habits_page.dart';
 import 'package:wellness_app/pages/mood/mood_selector.dart';
 
 class MoodPage extends StatelessWidget {
@@ -11,24 +12,20 @@ class MoodPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => MoodController(),
       child: Consumer<MoodController>(
-        builder: (context, controller, child) {
+        child: const _StaticContent(),
+        builder: (context, controller, staticContent) {
           return Scaffold(
             appBar: AppBar(
               title: Text('Track Your Mood'),
             ),
-            body: Center(
+            body: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'How are you feeling today?',
-                      style:textTheme.headlineSmall,
-                      textAlign: TextAlign.center,
-                    ),
+                    staticContent!,
                     const SizedBox(height: 40),
-                    // ikony do wyboru nastroju
                     MoodSelector(
                       selectedMoodValue: controller.selectedMoodValue,
                       onMoodSelected: (moodValue) =>
@@ -45,17 +42,7 @@ class MoodPage extends StatelessWidget {
                         ),
                       ),
                     const SizedBox(height: 20),
-                    TextField(
-                      onChanged: (value) => controller.setNote(value),
-                      decoration: const InputDecoration(
-                        hintText: 'Add a note about your mood (optional)',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.all(16),
-                      ),
-                      maxLines: 3,
-                    ),
 
-                    const SizedBox(height: 30),
                     ElevatedButton(
                       onPressed: controller.selectedMoodValue != null
                           ? () {
@@ -95,4 +82,35 @@ class MoodPage extends StatelessWidget {
         return 'Not selected';
     }
   }
+}
+class _StaticContent extends StatelessWidget {
+  const _StaticContent();
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final controller = MoodController();
+    return Column(
+      children: [
+        Text(
+          'How are you feeling today?',
+          style:textTheme.headlineSmall,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 40),
+        TextField(
+          onChanged: controller.setNote,
+          decoration: const InputDecoration(
+            hintText: 'Add a note about your mood (optional)',
+            border: OutlineInputBorder(),
+            contentPadding: EdgeInsets.all(16),
+          ),
+          maxLines: 3,
+        ),
+
+        const SizedBox(height: 30),
+      ]
+    );
+  }
+
 }
