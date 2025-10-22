@@ -9,7 +9,7 @@ class HydrationPage extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     return ChangeNotifierProvider(
-      create: (_) => HydrationPageController(),
+      create: (context) => HydrationPageController(context.read<ScoreProvider>()),
       child: Consumer<HydrationPageController>(
         child: const _StaticContentHydrationPage(),
         builder: (context, controller, staticContent) {

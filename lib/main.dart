@@ -3,5 +3,6 @@ import 'commons.dart';
 
 //glowna funkcja ranujaca apke
 void main() {
-  runApp(const WellnessApp());
+  runApp(
+      ChangeNotifierProvider(create:(context) => ScoreProvider(), child:const WellnessApp()));
 }

@@ -8,7 +8,7 @@ class HabitsPage extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     return ChangeNotifierProvider(
-      create: (_) => HabitsController(),
+      create: (context) => HabitsController(context.read<ScoreProvider>()),
       child: Consumer<HabitsController>(
         child: const _StaticHeader(),
       builder: (context, controller, staticHeader) {

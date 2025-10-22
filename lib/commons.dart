@@ -19,7 +19,6 @@ export 'widgets/step_circle.dart';
 
 //pages
 export 'pages/dashboard/dashboard_page.dart';
-export 'pages/dashboard/dashboard_page_controller.dart';
 export 'pages/habits/habits_page.dart';
 export 'pages/habits/habits_page_controller.dart';
 export 'pages/hydration/hydration_page.dart';

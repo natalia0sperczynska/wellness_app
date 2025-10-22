@@ -1,35 +1,41 @@
 import 'package:wellness_app/commons.dart';
 
-class MoodController extends ChangeNotifier{
+class MoodController extends ChangeNotifier {
+  final ScoreProvider _scoreProvider;
   int? _selectedMoodValue;
- String? _note;
+  String? _note;
 
- List<Mood>_moods=[];
+  List<Mood> _moods = [];
 
   int? get selectedMoodValue => _selectedMoodValue;
+
   String? get selectedNote => _note;
+
   List<Mood> get moods => _moods;
 
-  void selectMood(int mood){
+  MoodController(this._scoreProvider) {
+    _selectedMoodValue = _scoreProvider.moodValue;
+  }
+
+  void selectMood(int mood) {
     _selectedMoodValue = mood;
     notifyListeners();
   }
 
-  void setNote(String note){
+  void setNote(String note) {
     _note = note;
     notifyListeners();
   }
 
-
-  void saveMood(){
+  void saveMood() {
+    _scoreProvider.updateMood(_selectedMoodValue);
     //zapisanei do bazy danych todo
   }
 
-  void clear(){
-    _selectedMoodValue=null;
-    _note=null;
+  void clear() {
+    _selectedMoodValue = null;
+    _note = null;
+    _scoreProvider.updateMood(null);
     notifyListeners();
-
   }
-
 }

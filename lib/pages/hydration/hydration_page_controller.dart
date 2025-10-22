@@ -1,6 +1,7 @@
 import 'package:wellness_app/commons.dart';
 
 class HydrationPageController extends ChangeNotifier {
+  final ScoreProvider _scoreProvider;
   int _glassesOfWater = 0;
   final int _maxGlasses = 16;
   final TextEditingController _glassesOfWaterController =
@@ -10,9 +11,18 @@ class HydrationPageController extends ChangeNotifier {
 
   int get maxGlasses => _maxGlasses;
 
+  HydrationPageController(this._scoreProvider) {
+    _glassesOfWater = _scoreProvider.glassesDrunk;
+  }
+
+  void _updateStateAndScore() {
+    _scoreProvider.updateGlasses(_glassesOfWater);
+    notifyListeners();
+  }
+
   void setGlasses(int count) {
     _glassesOfWater = count;
-    notifyListeners();
+    _updateStateAndScore();
   }
 
   void toggleGlasses(int index) {
@@ -21,11 +31,11 @@ class HydrationPageController extends ChangeNotifier {
     } else {
       _glassesOfWater = index + 1;
     }
-    notifyListeners();
+    _updateStateAndScore();
   }
 
   void resetGlasses() {
     _glassesOfWater = 0;
-    notifyListeners();
+    _updateStateAndScore();
   }
 }

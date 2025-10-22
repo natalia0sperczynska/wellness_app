@@ -8,7 +8,9 @@ class StepsPage extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme =Theme.of(context).textTheme;
     return ChangeNotifierProvider(
-      create: (_) => StepsPageController(),
+      create: (context) => StepsPageController(
+        context.read<ScoreProvider>(),
+      ),
       child: Consumer<StepsPageController>(
         builder: (context, controller, _) {
           return Scaffold(

@@ -10,7 +10,7 @@ class MoodPage extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return ChangeNotifierProvider(
-      create: (_) => MoodController(),
+      create: (context) => MoodController(context.read<ScoreProvider>()),
       child: Consumer<MoodController>(
         child: const _StaticContent(),
         builder: (context, controller, staticContent) {
@@ -89,7 +89,7 @@ class _StaticContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final controller = MoodController();
+    final controller = MoodController(context.read<ScoreProvider>());
     return Column(
       children: [
         Text(

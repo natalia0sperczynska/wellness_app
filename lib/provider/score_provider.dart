@@ -5,16 +5,23 @@ class ScoreProvider extends ChangeNotifier {
   DailyScore? _todayScore;
   List<DailyScore> _scoreHistory = [];
 
+  int _steps = 0;
+  int? _moodValue;
+  int _completedHabits = 0;
+  int _totalHabits = 5;
+  int _glassesDrunk = 0;
+
   DailyScore? get todayScore => _todayScore;
   List<DailyScore> get scoreHistory => _scoreHistory;
 
-  void calculateTodayScore({
-    required int steps,
-    int? moodValue,
-    required int completedHabits,
-    required int totalHabits,
-    required int glassesDrunk,
-  }) {
+  int get steps => _steps;
+  int? get moodValue => _moodValue;
+  int get completedHabits => _completedHabits;
+  int get totalHabits => _totalHabits;
+  int get glassesDrunk => _glassesDrunk;
+  int get maxGlasses => 16;
+
+  void _recalculateScore() {
     _todayScore = DailyScore.calculateDailyScore(
       steps: steps,
       moodValue: moodValue,
@@ -22,8 +29,28 @@ class ScoreProvider extends ChangeNotifier {
       totalHabits: totalHabits,
       glassesDrunk: glassesDrunk,
     );
-
     notifyListeners();
+  }
+
+  void updateSteps(int newSteps) {
+    _steps = newSteps;
+    _recalculateScore();
+  }
+
+  void updateMood(int? newMood) {
+    _moodValue = newMood;
+    _recalculateScore();
+  }
+
+  void updateHabits(int completed, int total) {
+    _completedHabits = completed;
+    _totalHabits = total;
+    _recalculateScore();
+  }
+
+  void updateGlasses(int newGlasses) {
+    _glassesDrunk = newGlasses;
+    _recalculateScore();
   }
 
   void saveTodayScore() {
@@ -35,12 +62,11 @@ class ScoreProvider extends ChangeNotifier {
 
   //data for test
   void loadMockData() {
-    calculateTodayScore(
-      steps: 8500,
-      moodValue: 4,
-      completedHabits: 3,
-      totalHabits: 5,
-      glassesDrunk: 6,
-    );
+    _steps = 8500;
+    _moodValue = 4;
+    _completedHabits = 3;
+    _totalHabits = 5;
+    _glassesDrunk = 6;
+    _recalculateScore();
   }
 }
