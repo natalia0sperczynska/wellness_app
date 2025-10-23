@@ -1,4 +1,3 @@
-import 'package:google_fonts/google_fonts.dart';
 import 'package:wellness_app/commons.dart';
 
 final  lightTheme = ThemeData(
@@ -9,6 +8,7 @@ final  lightTheme = ThemeData(
   textTheme: TextTheme(
     displayLarge: GoogleFonts.indieFlower(fontSize: 48, fontWeight: FontWeight.bold, color: AppColors.textColor),
     headlineMedium: GoogleFonts.indieFlower(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textColor),
+    headlineLarge: GoogleFonts.indieFlower(fontSize: 40, fontWeight: FontWeight.bold, color: AppColors.textColor),
     bodyMedium: GoogleFonts.indieFlower(fontSize: 16, color: AppColors.textColor),
     labelLarge: GoogleFonts.indieFlower(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
   ),

@@ -75,7 +75,7 @@ class _GlassCounter extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
         child: Text('$glasses glasses of water',
-          style: Theme.of(context).textTheme.headlineLarge,
+          style: Theme.of(context).textTheme.displayLarge,
     )
     );
   }

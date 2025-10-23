@@ -1,17 +1,32 @@
 import 'package:wellness_app/commons.dart';
 
-class DailyScore {
+part 'daily_score.g.dart';
+
+@HiveType(typeId: 0)
+class DailyScore extends HiveObject{
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final DateTime date;
+  @HiveField(2)
   final int totalScore;
+  @HiveField(3)
   final int stepsScore;
+  @HiveField(4)
   final int moodScore;
+  @HiveField(5)
   final int habitsScore;
+  @HiveField(6)
   final int hydrationScore;
+  @HiveField(7)
   final int steps;
+  @HiveField(8)
   final int? moodValue;
+  @HiveField(9)
   final int completedHabits;
+  @HiveField(10)
   final int totalHabits;
+  @HiveField(11)
   final int glassesDrunk;
 
   DailyScore({
@@ -28,8 +43,26 @@ class DailyScore {
     required this.totalHabits,
     required this.glassesDrunk,
   });
+  //empty daily score
+  factory DailyScore.empty() {
+    return DailyScore(
+      id: '',
+      date: DateTime.now(),
+      totalScore: 0,
+      stepsScore: 0,
+      moodScore: 0,
+      habitsScore: 0,
+      hydrationScore: 0,
+      steps: 0,
+      moodValue: null,
+      completedHabits: 0,
+      totalHabits: 0,
+      glassesDrunk: 0,
+    );
+  }
 
   static DailyScore calculateDailyScore({
+    String? id,
     required int steps,
     required int? moodValue,
     required int completedHabits,
@@ -43,7 +76,7 @@ class DailyScore {
     int finalScore = stepScore + moodScore + habitsScore+hydrationScore;
 
     return DailyScore(
-      id: DateTime
+      id: (id != null && id.isNotEmpty) ? id : DateTime
           .now()
           .microsecondsSinceEpoch
           .toString(),

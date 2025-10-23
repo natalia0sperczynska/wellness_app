@@ -1,7 +1,4 @@
 import 'package:wellness_app/commons.dart';
-import 'package:wellness_app/pages/habits/habits_page.dart';
-import 'package:wellness_app/pages/mood/mood_selector.dart';
-
 class MoodPage extends StatelessWidget {
   const MoodPage({super.key});
 

@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:wellness_app/commons.dart';
 class StepsPage extends StatelessWidget {
   const StepsPage({super.key});
@@ -61,18 +60,13 @@ class StepsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 40),
 
-                    Container(
-                      height: 120,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: theme.primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Center(
-                          child: Text(
-                            "Graph Placeholder",
-                          )
-                      ),
+                    Text("Your weekly activity", style:theme.textTheme.headlineSmall),
+                    SizedBox(
+                      height: 300,
+                      child:BarChartSteps(
+                        history:context.read<ScoreProvider>().scoreHistory,
+                      )
+
                     ),
                     ElevatedButton(
                       onPressed: () => controller.resetSteps(),

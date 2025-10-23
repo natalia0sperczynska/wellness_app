@@ -47,7 +47,7 @@ class MoodSelector extends StatelessWidget {
           icon: Icons.sentiment_very_satisfied,
           color: Colors.green,
           isSelected: selectedMoodValue == 5,
-          tooltip: 'Great',
+          tooltip: 'Terrific',
           onTap: () => onMoodSelected(5),
         ),
       ],
