@@ -17,6 +17,7 @@ export 'widgets/progress_ring.dart';
 export 'widgets/score_breakdown.dart';
 export 'widgets/score_circle.dart';
 export 'widgets/step_circle.dart';
+export 'widgets/auth_wrapper.dart';
 
 //pages
 export 'pages/dashboard/dashboard_page.dart';
@@ -31,6 +32,7 @@ export 'pages/settings/settings_page.dart';
 export 'pages/settings/settings_page_controller.dart';
 export 'pages/steps/steps_page.dart';
 export 'pages/steps/steps_page_controller.dart';
+export 'pages/auth/auth_page.dart';
 
 export 'pages/home_page.dart';
 
@@ -55,4 +57,10 @@ export 'provider/score_provider.dart';
 //hive
 export 'package:hive_flutter/hive_flutter.dart';
 export 'package:hive/hive.dart';
+
+//firebase
+export 'package:firebase_core/firebase_core.dart';
+export  'firebase_options.dart';
+export 'package:cloud_firestore/cloud_firestore.dart';
+export 'package:firebase_auth/firebase_auth.dart';
 

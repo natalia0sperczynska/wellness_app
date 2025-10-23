@@ -1,5 +1,4 @@
 import 'package:wellness_app/commons.dart';
-import 'package:wellness_app/models/daily_score.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});

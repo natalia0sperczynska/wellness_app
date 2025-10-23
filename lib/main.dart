@@ -4,9 +4,9 @@ import 'commons.dart';
 //glowna funkcja ranujaca apke
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  Hive.registerAdapter(DailyScoreAdapter());
-  await Hive.openBox<DailyScore>('daily_scores');
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
       ChangeNotifierProvider(create:(context) => ScoreProvider()..loadData(), child:const WellnessApp()));
 }

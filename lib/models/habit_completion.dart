@@ -1,3 +1,4 @@
+import 'package:wellness_app/commons.dart';
 class HabitCompletion {
   final String id;
   final String habitId;
@@ -13,21 +14,24 @@ class HabitCompletion {
     required this.updatedAt,
   });
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'habitId': habitId,
-    'completedAt': completedAt.toIso8601String(),
-    'createdAt': createdAt.toIso8601String(),
-    'updatedAt': updatedAt.toIso8601String(),
-  };
+  factory HabitCompletion.fromFirestore(Map<String, dynamic> data, String documentId) {
+    return HabitCompletion(
+      id: documentId,
+      habitId: data['habitId'] as String? ?? '',
+      completedAt: (data['completedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+    );
+  }
 
-  factory HabitCompletion.fromJson(Map<String, dynamic> json) => HabitCompletion(
-    id: json['id'] as String,
-    habitId: json['habitId'] as String,
-    completedAt: DateTime.parse(json['completedAt'] as String),
-    createdAt: DateTime.parse(json['createdAt'] as String),
-    updatedAt: DateTime.parse(json['updatedAt'] as String),
-  );
+  Map<String, dynamic> toFirestore() {
+    return {
+      'habitId': habitId,
+      'completedAt': Timestamp.fromDate(completedAt),
+      'createdAt': Timestamp.fromDate(createdAt),
+      'updatedAt': Timestamp.fromDate(updatedAt),
+    };
+  }
 
   HabitCompletion copyWith({
     String? id,

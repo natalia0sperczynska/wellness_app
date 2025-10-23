@@ -1,6 +1,4 @@
-import 'package:wellness_app/pages/home_page.dart';
 import 'package:wellness_app/styles/themes.dart' as app_theme;
-
 import 'commons.dart';
 
 class WellnessApp extends StatelessWidget {
@@ -12,7 +10,7 @@ class WellnessApp extends StatelessWidget {
     return MaterialApp(
       title: 'Wellness App',
       theme: app_theme.lightTheme,
-      home: const HomePage(),
+      home: const AuthWrapper(),
       debugShowCheckedModeBanner: false,
       // home: const MyHomePage(title: 'Wellness App'),
     ); //ustawiam co ma byc home page

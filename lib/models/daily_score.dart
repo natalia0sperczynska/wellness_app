@@ -1,32 +1,17 @@
 import 'package:wellness_app/commons.dart';
 
-part 'daily_score.g.dart';
-
-@HiveType(typeId: 0)
 class DailyScore extends HiveObject{
-  @HiveField(0)
   final String id;
-  @HiveField(1)
   final DateTime date;
-  @HiveField(2)
   final int totalScore;
-  @HiveField(3)
   final int stepsScore;
-  @HiveField(4)
   final int moodScore;
-  @HiveField(5)
   final int habitsScore;
-  @HiveField(6)
   final int hydrationScore;
-  @HiveField(7)
   final int steps;
-  @HiveField(8)
   final int? moodValue;
-  @HiveField(9)
   final int completedHabits;
-  @HiveField(10)
   final int totalHabits;
-  @HiveField(11)
   final int glassesDrunk;
 
   DailyScore({
@@ -44,10 +29,11 @@ class DailyScore extends HiveObject{
     required this.glassesDrunk,
   });
   //empty daily score
-  factory DailyScore.empty() {
+  factory DailyScore.emptyForDate(DateTime date) {
+    String dateId = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     return DailyScore(
-      id: '',
-      date: DateTime.now(),
+      id: dateId,
+      date: date,
       totalScore: 0,
       stepsScore: 0,
       moodScore: 0,
@@ -61,8 +47,40 @@ class DailyScore extends HiveObject{
     );
   }
 
+  Map<String, dynamic> toFirestore() {
+    return {
+      'date': Timestamp.fromDate(date),
+      'totalScore': totalScore,
+      'stepsScore': stepsScore,
+      'moodScore': moodScore,
+      'habitsScore': habitsScore,
+      'hydrationScore': hydrationScore,
+      'steps': steps,
+      'moodValue': moodValue,
+      'completedHabits': completedHabits,
+      'totalHabits': totalHabits,
+      'glassesDrunk': glassesDrunk,
+    };
+  }
+  factory DailyScore.fromFirestore(Map<String, dynamic> data, String documentId) {
+    return DailyScore(
+      id: documentId,
+      date: (data['date'] as Timestamp).toDate(),
+      totalScore: data['totalScore'] as int? ?? 0,
+      stepsScore: data['stepsScore'] as int? ?? 0,
+      moodScore: data['moodScore'] as int? ?? 0,
+      habitsScore: data['habitsScore'] as int? ?? 0,
+      hydrationScore: data['hydrationScore'] as int? ?? 0,
+      steps: data['steps'] as int? ?? 0,
+      moodValue: data['moodValue'] as int?,
+      completedHabits: data['completedHabits'] as int? ?? 0,
+      totalHabits: data['totalHabits'] as int? ?? 0,
+      glassesDrunk: data['glassesDrunk'] as int? ?? 0,
+    );
+  }
+
   static DailyScore calculateDailyScore({
-    String? id,
+    required DateTime date,
     required int steps,
     required int? moodValue,
     required int completedHabits,
@@ -75,12 +93,10 @@ class DailyScore extends HiveObject{
     final hydrationScore = _calculateHydrationScore(glassesDrunk);
     int finalScore = stepScore + moodScore + habitsScore+hydrationScore;
 
+    String dateId = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     return DailyScore(
-      id: (id != null && id.isNotEmpty) ? id : DateTime
-          .now()
-          .microsecondsSinceEpoch
-          .toString(),
-      date: DateTime.now(),
+      id: dateId,
+      date: date,
       totalScore: finalScore,
       moodScore: moodScore,
       habitsScore: habitsScore,
@@ -93,7 +109,7 @@ class DailyScore extends HiveObject{
     );
   }
 
-  static _calculateStepScore(int steps) {
+  static int _calculateStepScore(int steps) {
     final score = (steps / 10000) * 30;
     return score.round().clamp(0, 30);
   }

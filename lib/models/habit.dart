@@ -1,3 +1,4 @@
+import 'package:wellness_app/commons.dart';
 class Habit {
   final String id;
   final String name;
@@ -15,23 +16,26 @@ class Habit {
     required this.updatedAt,
   });
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'emoji': emoji,
-    'category': category,
-    'createdAt': createdAt.toIso8601String(),
-    'updatedAt': updatedAt.toIso8601String(),
-  };
+  factory Habit.fromFirestore(Map<String, dynamic> data, String documentId) {
+    return Habit(
+      id: documentId,
+      name: data['name'] as String? ?? '',
+      emoji: data['emoji'] as String? ?? '',
+      category: data['category'] as String? ?? '',
+      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+    );
+  }
 
-  factory Habit.fromJson(Map<String, dynamic> json) => Habit(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    emoji: json['emoji'] as String,
-    category: json['category'] as String,
-    createdAt: DateTime.parse(json['createdAt'] as String),
-    updatedAt: DateTime.parse(json['updatedAt'] as String),
-  );
+  Map<String, dynamic> toFirestore() {
+    return {
+      'name': name,
+      'emoji': emoji,
+      'category': category,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'updatedAt': Timestamp.fromDate(updatedAt),
+    };
+  }
 
   Habit copyWith({
     String? id,

@@ -6,15 +6,25 @@ class HabitsController extends ChangeNotifier {
   List<Habit> _habits = [];
   Map<String, bool> _completionStatus = {};
   bool _isLoading = true;
+
   List<Habit> get habits => _habits;
+
   Map<String, bool> get completionStatus => _completionStatus;
+
   bool get isLoading => _isLoading;
+
   int get completedCount => _completionStatus.values.where((v) => v).length;
+
   int get totalCount => _habits.length;
 
   HabitsController(this._scoreProvider) {
-    loadHabits();
+    if (FirebaseAuth.instance.currentUser != null) {
+      loadHabits();
+    } else {
+      _isLoading = false;
+    }
   }
+
   void _updateGlobalScore() {
     _scoreProvider.updateHabits(completedCount, totalCount);
   }

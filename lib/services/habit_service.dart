@@ -1,18 +1,27 @@
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wellness_app/commons.dart';
 
 class HabitService {
-  static const String _habitsKey = 'habits';
-  static const String _completionsKey = 'habit_completions';
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> _initializeDefaultHabits() async {
-    final prefs = await SharedPreferences.getInstance();
-    final existingHabits = prefs.getString(_habitsKey);
+  CollectionReference<Map<String, dynamic>> _userHabitsCollection() {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) throw Exception("User not logged in for habits");
+    return _firestore.collection('users').doc(userId).collection('habits');
+  }
+  CollectionReference<Map<String, dynamic>> _userCompletionsCollection() {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) throw Exception("User not logged in for completions");
+    return _firestore.collection('users').doc(userId).collection('habitCompletions');
+  }
 
-    if (existingHabits == null) {
-      final now = DateTime.now();
-      final defaultHabits = [
+  Future<void> initializeDefaultHabitsIfNeeded() async {
+    try {
+      final snapshot = await _userHabitsCollection().limit(1).get();
+      if (snapshot.docs.isEmpty) {
+        print("No habits found for user, adding defaults...");
+        final now = DateTime.now();
+        final defaultHabits = [
         Habit(id: '1', name: 'Morning Meditation', emoji: '🧘', category: 'Mindfulness', createdAt: now, updatedAt: now),
         Habit(id: '2', name: 'Drink Water', emoji: '💧', category: 'Health', createdAt: now, updatedAt: now),
         Habit(id: '3', name: 'Exercise', emoji: '🏃', category: 'Fitness', createdAt: now, updatedAt: now),
@@ -22,132 +31,175 @@ class HabitService {
         Habit(id: '7', name: 'Healthy Meal', emoji: '🥗', category: 'Nutrition', createdAt: now, updatedAt: now),
         Habit(id: '8', name: 'Walk Outside', emoji: '🌳', category: 'Nature', createdAt: now, updatedAt: now),
       ];
-
-      final habitsJson = jsonEncode(defaultHabits.map((h) => h.toJson()).toList());
-      await prefs.setString(_habitsKey, habitsJson);
+        final batch = _firestore.batch();
+        for (final habit in defaultHabits) {
+          final docRef = _userHabitsCollection().doc();
+          batch.set(docRef, habit.toFirestore());
+        }
+        await batch.commit();
+        print("Default habits added.");
+      }
+    } catch (e) {
+      print("Error initializing default habits: $e");
     }
   }
 
   Future<List<Habit>> getAllHabits() async {
-    await _initializeDefaultHabits();
-    final prefs = await SharedPreferences.getInstance();
-    final habitsJson = prefs.getString(_habitsKey);
-
-    if (habitsJson == null) return [];
-
-    final List<dynamic> decoded = jsonDecode(habitsJson);
-    return decoded.map((json) => Habit.fromJson(json)).toList();
+    await initializeDefaultHabitsIfNeeded();
+    try {
+      final snapshot = await _userHabitsCollection().orderBy('createdAt').get();
+      return snapshot.docs.map((doc) => Habit.fromFirestore(doc.data(), doc.id)).toList();
+    } catch (e) {
+      print("Error getting habits: $e");
+      return []; }
   }
 
   Future<void> addHabit(Habit habit) async {
-    final habits = await getAllHabits();
-    habits.add(habit);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_habitsKey, jsonEncode(habits.map((h) => h.toJson()).toList()));
+    try {
+      await _userHabitsCollection().add(habit.toFirestore());
+    } catch (e) {
+      print("Error adding habit: $e");
+    }
   }
 
   Future<void> updateHabit(Habit habit) async {
-    final habits = await getAllHabits();
-    final index = habits.indexWhere((h) => h.id == habit.id);
-    if (index != -1) {
-      habits[index] = habit;
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_habitsKey, jsonEncode(habits.map((h) => h.toJson()).toList()));
+    try {
+      await _userHabitsCollection().doc(habit.id).update(habit.toFirestore());
+    } catch (e) {
+      print("Error updating habit: $e");
     }
   }
 
   Future<void> deleteHabit(String habitId) async {
-    final prefs = await SharedPreferences.getInstance();
-    final habits = await getAllHabits();
-    habits.removeWhere((h) => h.id == habitId);
+    try {
+      await _userHabitsCollection().doc(habitId).delete();
+      final completionsSnapshot = await _userCompletionsCollection()
+          .where('habitId', isEqualTo: habitId)
+          .get();
 
-    final completions = await getCompletions();
-    completions.removeWhere((c) => c.habitId == habitId);
-
-    await prefs.setString(
-      _habitsKey,
-      jsonEncode(habits.map((h) => h.toJson()).toList()),
-    );
-    await prefs.setString(
-      _completionsKey,
-      jsonEncode(completions.map((c) => c.toJson()).toList()),
-    );
+      if (completionsSnapshot.docs.isNotEmpty) {
+        final batch = _firestore.batch();
+        for (final doc in completionsSnapshot.docs) {
+          batch.delete(doc.reference);
+        }
+        await batch.commit();
+        print("Deleted ${completionsSnapshot.docs.length} completions for habit $habitId");
+      }
+    } catch (e) {
+      print("Error deleting habit or its completions: $e");
+    }
   }
-
-  Future<List<HabitCompletion>> getCompletions() async {
-    final prefs = await SharedPreferences.getInstance();
-    final completionsJson = prefs.getString(_completionsKey);
-
-    if (completionsJson == null) return [];
-
-    final List<dynamic> decoded = jsonDecode(completionsJson);
-    return decoded.map((json) => HabitCompletion.fromJson(json)).toList();
+  Future<List<HabitCompletion>> getCompletions({DateTime? since}) async {
+    try {
+      Query<Map<String, dynamic>> query = _userCompletionsCollection();
+      if (since != null) {
+        query = query.where('completedAt', isGreaterThanOrEqualTo: Timestamp.fromDate(since));
+      }
+      final snapshot = await query.orderBy('completedAt', descending: true).get();
+      return snapshot.docs.map((doc) => HabitCompletion.fromFirestore(doc.data(), doc.id)).toList();
+    } catch (e) {
+      print("Error getting completions: $e");
+      return [];
+    }
   }
 
   Future<void> toggleHabitCompletion(String habitId, DateTime date) async {
-    final completions = await getCompletions();
     final dateOnly = DateTime(date.year, date.month, date.day);
+    final completionTimestamp = Timestamp.fromDate(dateOnly);
 
-    final existingIndex = completions.indexWhere((c) =>
-    c.habitId == habitId &&
-        c.completedAt.year == dateOnly.year &&
-        c.completedAt.month == dateOnly.month &&
-        c.completedAt.day == dateOnly.day
-    );
+    try {
+      final querySnapshot = await _userCompletionsCollection()
+          .where('habitId', isEqualTo: habitId)
+          .where('completedAt', isEqualTo: completionTimestamp)
+          .limit(1)
+          .get();
 
-    if (existingIndex != -1) {
-      completions.removeAt(existingIndex);
-    } else {
-      final now = DateTime.now();
-      completions.add(HabitCompletion(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        habitId: habitId,
-        completedAt: dateOnly,
-        createdAt: now,
-        updatedAt: now,
-      ));
+      if (querySnapshot.docs.isNotEmpty) {
+        final docId = querySnapshot.docs.first.id;
+        await _userCompletionsCollection().doc(docId).delete();
+        print("Removed completion for habit $habitId on $dateOnly");
+      } else {
+        final now = DateTime.now();
+        final newCompletion = HabitCompletion(
+          id: '',
+          habitId: habitId,
+          completedAt: dateOnly,
+          createdAt: now,
+          updatedAt: now,
+        );
+        await _userCompletionsCollection().add(newCompletion.toFirestore());
+        print("Added completion for habit $habitId on $dateOnly");
+      }
+    } catch (e) {
+      print("Error toggling habit completion: $e");
     }
-
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_completionsKey, jsonEncode(completions.map((c) => c.toJson()).toList()));
   }
 
   Future<bool> isHabitCompletedToday(String habitId) async {
-    final completions = await getCompletions();
     final today = DateTime.now();
+    final todayDateOnly = DateTime(today.year, today.month, today.day);
+    final todayTimestamp = Timestamp.fromDate(todayDateOnly);
 
-    return completions.any((c) =>
-    c.habitId == habitId &&
-        c.completedAt.year == today.year &&
-        c.completedAt.month == today.month &&
-        c.completedAt.day == today.day
-    );
+    try {
+      final querySnapshot = await _userCompletionsCollection()
+          .where('habitId', isEqualTo: habitId)
+          .where('completedAt', isEqualTo: todayTimestamp)
+          .limit(1)
+          .get();
+      return querySnapshot.docs.isNotEmpty;
+    } catch (e) {
+      print("Error checking if habit completed today: $e");
+      return false;
+    }
   }
 
   Future<int> getStreakForHabit(String habitId) async {
-    final completions = await getCompletions();
-    final habitCompletions = completions
-        .where((c) => c.habitId == habitId)
-        .map((c) => DateTime(c.completedAt.year, c.completedAt.month, c.completedAt.day))
-        .toSet()
-        .toList()..sort((a, b) => b.compareTo(a));
+    try {
+      final completionsSnapshot = await _userCompletionsCollection()
+          .where('habitId', isEqualTo: habitId)
+          .orderBy('completedAt', descending: true)
+          .get();
 
-    if (habitCompletions.isEmpty) return 0;
+      final habitCompletions = completionsSnapshot.docs
+          .map((doc) => (doc.data()['completedAt'] as Timestamp).toDate())
+          .map((dt) => DateTime(dt.year, dt.month, dt.day))
+          .toSet()
+          .toList();
 
-    int streak = 0;
-    final today = DateTime.now();
-    final todayDate = DateTime(today.year, today.month, today.day);
+      if (habitCompletions.isEmpty) return 0;
 
-    DateTime checkDate = todayDate;
-    for (final completionDate in habitCompletions) {
-      if (completionDate.isAtSameMomentAs(checkDate)) {
-        streak++;
-        checkDate = checkDate.subtract(const Duration(days: 1));
-      } else if (completionDate.isBefore(checkDate)) {
-        break;
+      int streak = 0;
+      final today = DateTime.now();
+      final todayDate = DateTime(today.year, today.month, today.day);
+
+      DateTime checkDate = todayDate;
+      int completionIndex = 0;
+
+
+      while (completionIndex < habitCompletions.length) {
+        final completionDate = habitCompletions[completionIndex];
+
+        if (completionDate.isAtSameMomentAs(checkDate)) {
+          streak++;
+          checkDate = checkDate.subtract(const Duration(days: 1));
+          completionIndex++;
+        } else if (completionDate.isBefore(checkDate)) {
+          break;
+        } else {
+          completionIndex++;
+        }
       }
-    }
+      if (streak > 0 && !habitCompletions.first.isAtSameMomentAs(todayDate)) {
+        final yesterday = todayDate.subtract(const Duration(days: 1));
+        if (!habitCompletions.first.isAtSameMomentAs(yesterday)) {
+          return 0;
+        }
+      }
 
-    return streak;
+      return streak;
+    } catch (e) {
+      print("Error calculating streak: $e");
+      return 0;
+    }
   }
 }
