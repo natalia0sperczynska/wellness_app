@@ -5,16 +5,27 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
         appBar: AppBar(
           title: Text('Settings'),
         ),
-        body: Center(
+      body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const UserDataWidget(),
+        const Spacer(),
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+
            child: ElevatedButton(
                 onPressed: ()  async { await FirebaseAuth.instance.signOut();},
             child: const Text("Logout")
-           ), // <-- Add comma here
-        ), // <-- Add parenthesis here
-    ); // <-- Add parenthesis here
+           ),
+        ),
+        const SizedBox(height: 16),
+      ],
+    ),
+    );
   }
 }

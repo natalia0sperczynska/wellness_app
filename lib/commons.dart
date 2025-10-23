@@ -18,6 +18,7 @@ export 'widgets/score_breakdown.dart';
 export 'widgets/score_circle.dart';
 export 'widgets/step_circle.dart';
 export 'widgets/auth_wrapper.dart';
+export 'widgets/user_data_widget.dart';
 
 //pages
 export 'pages/dashboard/dashboard_page.dart';
